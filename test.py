@@ -2,18 +2,20 @@ import time
 import requests
 import pandas as pd
 import numpy as np
-from openpyxl import Workbook
 
-planilha_cnpj = "nova.xlsx"
+# Manipulação da planilha
 
-coluna = 0
-dados_planilha = pd.read_excel("nova.xlsx", usecols=[coluna], header=None)
+planilha_cnpj = "teste_cnpj.xlsx"
+
+coluna = 7
+dados_planilha = pd.read_excel("teste_cnpj.xlsx", usecols=[coluna], header=None)
 valores_coluna = dados_planilha[coluna].tolist()
 
 array_coluna_cnpj = np.array(valores_coluna)
 
 """=========================================================================================="""
 
+# API
 def obter_informacoes_cnpj(cnpj):
     url = f'https://receitaws.com.br/v1/cnpj/{cnpj}'
     
@@ -22,46 +24,51 @@ def obter_informacoes_cnpj(cnpj):
         response.raise_for_status()  
         dados_empresa = response.json()
         
-        print(f'\n{dados_empresa}\n')
+        return dados_empresa
 
     except requests.exceptions.RequestException as e:
         print(f'Erro na requisição: {e}')
 
-"""=========================================================================================="""    
-#Dados excel CNPJs
-cnpj_exemplo = array_coluna_cnpj
-#API
-response = requests.get("https://receitaws.com.br/v1/cnpj/{cnpj}")
-"""index = 0
-lista_cnpj = []
+"""=========================================================================================="""   
 
-while index <= 1: 
-    obter_informacoes_cnpj(cnpj_exemplo[index])
-    print("Requisição bem-sucedida!")
-    print("Aguarde...\n")
-    time.sleep(2)
-    index += 1
-"""
+# Dados do excel (CNPJs)
+cnpj_exemplo = array_coluna_cnpj
+# API
+response = requests.get("https://receitaws.com.br/v1/cnpj/{cnpj}")
 """==========================================================================================""" 
 
-# Dados acumulados da API
+# Inicialização
 dados_acumulados = []
+x = "iniciar";
+cont = 0
+
+async def teste():
+
 
 # Consulta API e acumula os dados
-for cnpj_exemplo in array_coluna_cnpj:
-    dados_empresa = obter_informacoes_cnpj(cnpj_exemplo)
-    
-    #Verifica se está pegando algum dado de 'dados_empresa'
-    print(dados_empresa)
-    print("Consultando próximo CNPJ...")
-    time.sleep(3)
+    for cnpj_exemplo in array_coluna_cnpj:
+        cont + 1
+        if cont < 3:
+        dados_empresa = obter_informacoes_cnpj(cnpj_exemplo)
+        
+        if x == "parar":
+            time.sleep(60)
+            x = "iniciar";
 
-    if dados_empresa:
-        dados_acumulados.append(dados_empresa)
-        time.sleep(1)
+        if x == "iniciar":
+            index = 0;
 
-    if cnpj_exemplo == '':
-        print("Nenhum CNPJ encontrado!")
+            while index < 3:
+                #print(dados_empresa)
+                if dados_empresa:
+                    print(f"CNPJ: {cnpj_exemplo}\n")
+                    dados_acumulados.append(dados_empresa)
+
+                print("\nConsultando próximo CNPJ...\n")
+                time.sleep(1)
+                index += 1
+
+            x = "parar";
 
 # Criar DataFrame pandas com os dados acumulados
 df_acumulado = pd.DataFrame(dados_acumulados)
@@ -70,4 +77,4 @@ df_acumulado = pd.DataFrame(dados_acumulados)
 with pd.ExcelWriter('dados_acumulados.xlsx', engine='openpyxl') as writer:
     print(dados_acumulados)
     df_acumulado.to_excel(writer, sheet_name='Sheet1', index=False)
-    print("Planilha atualizada!")
+    print("\nPlanilha atualizada!\n")

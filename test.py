@@ -48,20 +48,19 @@ for cnpj_exemplo in array_coluna_cnpj:
     if cont <= 3:
         dados_empresa = obter_informacoes_cnpj(cnpj_exemplo)
 
-        if x == "iniciar":
-            if dados_empresa:
-                    print(f"CNPJ: {cnpj_exemplo}\n")
-                    dados_acumulados.append(dados_empresa)
+        if dados_empresa:
+            print("\nConsultando CNPJ...\n")
+            print(f"CNPJ: {cnpj_exemplo}\n")
+            dados_acumulados.append(dados_empresa)
 
-                    print("\nConsultando próximo CNPJ...\n")
-                    time.sleep(1)
+            time.sleep(1)
           
-        elif x == "parar":
-            time.sleep(60)
-            x = "iniciar";
-            cont = 0
+    elif cont > 3:
+        print("Aguarde...")
+        time.sleep(60)
+        cont = 0
 
-# Criar DataFrame pandas com os dados acumulados
+# Criar DataFrame com os dados acumulados
 df_acumulado = pd.DataFrame(dados_acumulados)
 
 # Salvar DataFrame no Excel

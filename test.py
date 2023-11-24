@@ -33,8 +33,7 @@ def obter_informacoes_cnpj(cnpj):
 
 # Dados do excel (CNPJs)
 cnpj_exemplo = array_coluna_cnpj
-# API
-response = requests.get("https://receitaws.com.br/v1/cnpj/{cnpj}")
+
 """==========================================================================================""" 
 
 # Inicialização
@@ -42,33 +41,25 @@ dados_acumulados = []
 x = "iniciar";
 cont = 0
 
-async def teste():
-
-
+#async def teste():
 # Consulta API e acumula os dados
-    for cnpj_exemplo in array_coluna_cnpj:
-        cont + 1
-        if cont < 3:
+for cnpj_exemplo in array_coluna_cnpj:
+    cont += 1
+    if cont <= 3:
         dados_empresa = obter_informacoes_cnpj(cnpj_exemplo)
-        
-        if x == "parar":
-            time.sleep(60)
-            x = "iniciar";
 
         if x == "iniciar":
-            index = 0;
-
-            while index < 3:
-                #print(dados_empresa)
-                if dados_empresa:
+            if dados_empresa:
                     print(f"CNPJ: {cnpj_exemplo}\n")
                     dados_acumulados.append(dados_empresa)
 
-                print("\nConsultando próximo CNPJ...\n")
-                time.sleep(1)
-                index += 1
-
-            x = "parar";
+                    print("\nConsultando próximo CNPJ...\n")
+                    time.sleep(1)
+          
+        elif x == "parar":
+            time.sleep(60)
+            x = "iniciar";
+            cont = 0
 
 # Criar DataFrame pandas com os dados acumulados
 df_acumulado = pd.DataFrame(dados_acumulados)

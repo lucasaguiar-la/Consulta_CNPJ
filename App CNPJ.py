@@ -63,7 +63,7 @@ for cnpj_exemplo in array_coluna_cnpj:
             print(f"\nConsultando o CNPJ: {cnpj_exemplo}\n")
             dados_acumulados.append(dados_empresa)
             time.sleep(0.5)
-          
+
     elif cont > 3:
         print("A aplicação consulta apenas 3 CNPJs por minuto, por favor, aguarde...")
         print(f"CNPJs consultados: {len(dados_acumulados)}")
@@ -77,11 +77,13 @@ for cnpj_exemplo in array_coluna_cnpj:
 
         cont = 0
 
+
 # Criar DataFrame com os dados acumulados
 df_acumulado = pd.DataFrame(dados_acumulados)
 
 # Salvar DataFrame no Excel
 with pd.ExcelWriter('Planilha de CNPJs.xlsx', engine='openpyxl') as writer:
     print(f"\nTotal de consultas: {len(dados_acumulados)}")
+
     df_acumulado.to_excel(writer, sheet_name='Sheet1', index=False)
     print("\nPlanilha de CNPJs criada com sucesso!\n")

@@ -1,25 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
-import pandas as pd
-import numpy as np
 import threading
-
-# Manipulação da planilha
-
-planilha_cnpj = "CNPJs.xlsx"
-coluna = 1
-linha = 1
-
-dados_planilha = pd.read_excel(planilha_cnpj, usecols=[coluna], skiprows=linha, sheet_name='CNPJs', header=None, dtype=str)
-print(dados_planilha)
-valores_coluna = dados_planilha[coluna].tolist()
-print(valores_coluna)
-
-array_coluna_cnpj = np.array(valores_coluna)
-
-# Dados do excel (CNPJs)
-cnpj_exemplo = array_coluna_cnpj
 
 """==========================================================================================""" 
 
@@ -73,3 +55,4 @@ with pd.ExcelWriter('Planilha de CNPJs.xlsx', engine='openpyxl') as writer:
 
     df_acumulado.to_excel(writer, sheet_name='CNPJs', index=False)
     print("\nPlanilha de CNPJs criada com sucesso!\n")
+''''''

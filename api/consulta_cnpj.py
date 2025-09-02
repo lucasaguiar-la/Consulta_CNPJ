@@ -2,15 +2,19 @@
 import json
 import requests
 
-def obter_informacoes_cnpj(cnpj):
+def buscar_infos(cnpj):
     url = f'https://receitaws.com.br/v1/cnpj/{cnpj}'
     
     try:
-        response = requests.get(url)
-        response.raise_for_status()  
-        dados_empresa = response.json()
-        resp = json.loads(response.text)
+        req = requests.get(url)
+        req.raise_for_status()
+
+        dados_empresa = req.json()
+        print(dados_empresa)
+
+        resp = json.loads(req.text)
         print(resp['nome'])
+
         return dados_empresa
 
     except requests.exceptions.RequestException as e:

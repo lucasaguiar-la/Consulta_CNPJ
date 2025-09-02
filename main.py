@@ -1,51 +1,50 @@
 # -*- coding: utf-8 -*-
 
-import time
+from src.extrator import extrair_valores
+from api.consulta_cnpj import buscar_infos
+from src.utils import contador
+from time import sleep
 import threading
 
-"""==========================================================================================""" 
-
-# Inicialização
-dados_acumulados = []
 cont = 0
+dados_acumulados = []
 
 print("\nIniciando...\n")
-time.sleep(3)
+sleep(1)
 
-# Função para a contagem regressiva
-def contador(tempo_total):
-    while tempo_total > 0:
-        print(f"Tempo para a próxima consulta: {tempo_total} segundos", end='\r')
-        time.sleep(1)
-        tempo_total -= 1
+lista_cnpj = extrair_valores()
 
-# Consulta API e acumula os dados
-for cnpj_exemplo in array_coluna_cnpj:
+for cnpj in lista_cnpj:
 
     if cont == 3:
-        print("A aplicação consulta apenas 3 CNPJs por minuto, por favor, aguarde...")
-        print(f"CNPJs consultados: {len(dados_acumulados)}")
-        print(f"CNPJs faltantes: {(len(array_coluna_cnpj)) - (len(dados_acumulados))}\n")
+        print(
+            "\nA aplicação consulta (gratuitamente) apenas 3 CNPJs por minuto, por favor, aguarde...\n",
+            f"CNPJs consultados: {len(dados_acumulados)}\n",
+            f"CNPJs faltantes: {(len(lista_cnpj)) - (len(dados_acumulados))}\n"
+        )
 
-        thread_contador = threading.Thread(target=contador, args=(60,))
+        thread_contador = threading.Thread(target=contador(60), args=(60,))
         thread_contador.start()
 
-        time.sleep(60)
+        sleep(61)
         thread_contador.join()
 
         cont = 0
-    
-    dados_empresa = obter_informacoes_cnpj(cnpj_exemplo)
 
-    if dados_empresa:
-        print(f"\nConsultando o CNPJ: {cnpj_exemplo}\n")
-        dados_acumulados.append(dados_empresa)
-        time.sleep(2)
-        
-    cont += 1
+    try:
+        dados_empresa = buscar_infos(cnpj)
+
+        if dados_empresa:
+            dados_acumulados.append(dados_empresa)
+            sleep(2)
+            
+        cont += 1
+    
+    except Exception as e:
+        print(f'Erro ao consultar o CNPJ {cnpj}: {e}')
 
 """==========================================================================================""" 
-
+'''
 # Criar DataFrame com os dados acumulados
 df_acumulado = pd.DataFrame(dados_acumulados)
 
@@ -55,4 +54,4 @@ with pd.ExcelWriter('Planilha de CNPJs.xlsx', engine='openpyxl') as writer:
 
     df_acumulado.to_excel(writer, sheet_name='CNPJs', index=False)
     print("\nPlanilha de CNPJs criada com sucesso!\n")
-''''''
+'''

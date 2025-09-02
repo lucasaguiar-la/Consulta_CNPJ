@@ -1,19 +1,23 @@
-
+from dotenv import load_dotenv
+import os
 import json
 import requests
 
+load_dotenv()
 def buscar_infos(cnpj):
-    url = f'https://receitaws.com.br/v1/cnpj/{cnpj}'
-    
+    url = os.getenv("API") + cnpj
+
     try:
         req = requests.get(url)
         req.raise_for_status()
-
         dados_empresa = req.json()
-        print(dados_empresa)
 
         resp = json.loads(req.text)
-        print(resp['nome'])
+        print(
+            "\nConsultando...\n"
+            f"CNPJ: {resp['cnpj']}\n"
+            f"Nome Empresa: {resp['nome']}\n"
+        )
 
         return dados_empresa
 

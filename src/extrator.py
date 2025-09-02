@@ -8,8 +8,18 @@ def extrair_valores():
     coluna = 0
     PLANILHA = os.getenv("CNPJ")
 
-    dados_planilha = pd.read_excel(PLANILHA, usecols=[coluna], skiprows=linha, sheet_name=0, header=None, dtype=str)
-    print(f'Dados da planilha:\n{dados_planilha}')
-    valores_coluna = dados_planilha[coluna].tolist()
+    try:
+        dados_planilha = pd.read_excel(PLANILHA, usecols=[coluna], skiprows=linha, sheet_name=0, header=None, dtype=str)
+        print(
+            "="*20 +
+            f"\nDados da planilha:\n{dados_planilha}\n" +
+            "="*20 +
+            "\n"
+        )
+        valores_coluna = dados_planilha[coluna].tolist()
+
+    except Exception as e:
+        print(f'Erro ao extrair dados da planilha: {e}')
+        valores_coluna = []
 
     return valores_coluna

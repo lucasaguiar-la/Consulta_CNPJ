@@ -1,0 +1,9 @@
+# Cache
+__pycache__
+
+# Ambiente Virtual
+venv
+
+# Pastas
+.idea/*
+planilhas/consulta.xlsx

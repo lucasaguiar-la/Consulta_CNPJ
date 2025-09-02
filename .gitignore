@@ -1,4 +1,5 @@
 # Cache
+.vscode
 __pycache__
 
 # Ambiente Virtual
@@ -6,4 +7,5 @@ venv
 
 # Pastas
 .idea/*
-planilhas/consulta.xlsx
+planilhas/raw/consulta.xlsx
+planilhas/salvas/*
